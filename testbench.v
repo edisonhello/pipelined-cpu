@@ -3,7 +3,6 @@
 module TestBench;
 
 reg                Clk;
-reg                Reset;
 reg                Start;
 integer            i, outfile, counter;
 integer            stall, flush;
@@ -59,7 +58,7 @@ end
   
 always@(posedge Clk) begin
     // TODO: change # of cycles as you need
-    if(counter == 15)    // stop after 30 cycles
+    if(counter == 15)    // stop after 15 cycles
         $finish;
 
     // TODO: put in your own signal to count stall and flush
