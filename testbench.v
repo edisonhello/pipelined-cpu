@@ -37,6 +37,8 @@ initial begin
         CPU.Registers.register[i] = 32'b0;
     end
 
+	CPU.PC.pc_o = 0;
+
     // TODO: initialize pipeline registers
 	CPU.IFIDReg.nowpc = 0;
 	CPU.IFIDReg.instruction = 0;
@@ -53,8 +55,8 @@ initial begin
 	CPU.EXMEMReg.r2 = 0;
 	CPU.EXMEMReg.r3 = 0;
 	CPU.EXMEMReg.r4 = 0;
-	CPU.EXMEMReg.r5 = 5'b00100; // is_branch = true
-	CPU.EXMEMReg.r6 = 1'b1; // zero = true
+	CPU.EXMEMReg.r5 = 0;
+	CPU.EXMEMReg.r6 = 0;
     
 	CPU.MEMWBReg.r1 = 0;
 	CPU.MEMWBReg.r2 = 0;

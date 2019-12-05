@@ -8,8 +8,8 @@ output [31:0] nowpc_o, instruction_o;
 reg [31:0] nowpc, instruction;
 
 always @ (posedge clk_i) begin
-    nowpc = nowpc_i;
-    instruction = instruction_i;
+    nowpc <= nowpc_i;
+    instruction <= instruction_i;
 end
 
 assign nowpc_o = nowpc;
@@ -33,18 +33,18 @@ reg [4:0] r5, r6;
 reg [7:0] r7;
 
 always @ (posedge clk_i) begin
-    r1 = nowpc_i;
-    r2 = reg_data_1_i;
-    r3 = reg_data_2_i;
-    r4 = imm_i;
-    r5 = alu_ctrl_instr_i;
-    r6 = reg_write_addr_i;
-    r7 = control_i;
+    r1 <= nowpc_i;
+    r2 <= reg_data_1_i;
+    r3 <= reg_data_2_i;
+    r4 <= imm_i;
+    r5 <= alu_ctrl_instr_i;
+    r6 <= reg_write_addr_i;
+    r7 <= control_i;
 end
 
 assign nowpc_o = r1;
-assign reg_data_1_l = r2;
-assign reg_data_2_l = r3;
+assign reg_data_1_o = r2;
+assign reg_data_2_o = r3;
 assign imm_o = r4;
 assign alu_ctrl_instr_o = r5;
 assign reg_write_addr_o = r6;
@@ -72,12 +72,12 @@ reg [4:0] r5;
 reg r6;
 
 always @ (posedge clk_i) begin
-	r1 = pc_select_1_i;
-	r2 = alu_result_i;
-	r3 = reg_data_2_i;
-	r4 = reg_write_addr_i;
-	r5 = control_i;
-	r6 = alu_zero_i;
+	r1 <= pc_select_1_i;
+	r2 <= alu_result_i;
+	r3 <= reg_data_2_i;
+	r4 <= reg_write_addr_i;
+	r5 <= control_i;
+	r6 <= alu_zero_i;
 end
 
 assign pc_select_1_o = r1;
@@ -106,10 +106,10 @@ reg [4:0] r3;
 reg [1:0] r4;
 
 always @ (posedge clk_i) begin
-	r1 = mem_read_data_i;
-	r2 = alu_result_o;
-	r3 = reg_write_addr_i;
-	r4 = control_i;
+	r1 <= mem_read_data_i;
+	r2 <= alu_result_i;
+	r3 <= reg_write_addr_i;
+	r4 <= control_i;
 end
 
 assign mem_read_data_o = r1;
