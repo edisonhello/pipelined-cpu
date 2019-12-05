@@ -15,6 +15,9 @@ CPU CPU(
 );
   
 initial begin
+	$dumpfile("a.vcd");
+	$dumpvars;
+
     counter = 0;
     stall = 0;
     flush = 0;
@@ -35,7 +38,29 @@ initial begin
     end
 
     // TODO: initialize pipeline registers
+	CPU.IFIDReg.nowpc = 0;
+	CPU.IFIDReg.instruction = 0;
+
+	CPU.IDEXReg.r1 = 0;
+	CPU.IDEXReg.r2 = 0;
+	CPU.IDEXReg.r3 = 0;
+	CPU.IDEXReg.r4 = 0;
+	CPU.IDEXReg.r5 = 0;
+	CPU.IDEXReg.r6 = 0;
+	CPU.IDEXReg.r7 = 0;
+
+	CPU.EXMEMReg.r1 = 0;
+	CPU.EXMEMReg.r2 = 0;
+	CPU.EXMEMReg.r3 = 0;
+	CPU.EXMEMReg.r4 = 0;
+	CPU.EXMEMReg.r5 = 5'b00100; // is_branch = true
+	CPU.EXMEMReg.r6 = 1'b1; // zero = true
     
+	CPU.MEMWBReg.r1 = 0;
+	CPU.MEMWBReg.r2 = 0;
+	CPU.MEMWBReg.r3 = 0;
+	CPU.MEMWBReg.r4 = 0;
+
     // Load instructions into instruction memory
     $readmemb("../testdata/instruction.txt", CPU.Instruction_Memory.memory);
     
