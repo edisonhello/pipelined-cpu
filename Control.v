@@ -45,7 +45,7 @@ always @ (op_i) begin
         r_branch_o   = 0;
         r_memread_o  = 0;
         r_memwrite_o = 0;
-        r_memtoreg_o = 1;
+        r_memtoreg_o = 0;
         r_alusrc_o   = 1;
         r_aluop_o    = 2'b11;
         r_regwrite_o = 1;
