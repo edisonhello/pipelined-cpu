@@ -88,18 +88,18 @@ wire [31:0] ALU_new_sr1, ALU_new_sr2;
 MUX32_3 ALUSrc1(
     .a_i            (reg_data_1_EX),
     .b_i            (reg_write_data_WB),
-    .c_i            (ALU_result_MEM)
+    .c_i            (ALU_result_MEM),
     .ctrl_i         (forwardA),
     .o_o            (ALU_new_sr1)
-)
+);
 //lawfung
 MUX32_3 ALUSrc2(
     .a_i            (reg_data_2_EX),
     .b_i            (reg_write_data_WB),
-    .c_i            (ALU_result_MEM)
+    .c_i            (ALU_result_MEM),
     .ctrl_i         (forwardB),
     .o_o            (ALU_new_sr2)
-)
+);
 
 MUX32 ALUSrcMUX(
     .a_i            (ALU_new_sr2),  //lawfung
@@ -127,12 +127,12 @@ MUX32 MemToRegMUX(
 );
 //lawfung
 Hazard Hazard(
-    .rs1_i          (instruction_ID[19:15]);
-    .rs2_i          (instruction_ID[24:20]);
-    .rrd_i          ()
+    .rs1_i          (instruction_ID[19:15]),
+    .rs2_i          (instruction_ID[24:20]),
+    .rrd_i          (),
     .mem_rd_i       ()
     
-)
+);
 
 Control Control(
     .op_i           (instruction_ID[6:0]),
@@ -151,12 +151,12 @@ MUX32_8 ControlMUX(
     .a_i            (control_ID),
     .ctrl_i         (),
     .o_o            (control_ID_new)
-)
+);
 
 ALUControl ALUControl(
     .aluop_i        (alu_op),
     // .inst_i         ({instruction[30], instruction[25], instruction[14:12]}),
-	.inst_i			(alu_ctrl_input_EX),
+    .inst_i			(alu_ctrl_input_EX),
     .aluctrl_o      (alu_ctrl)
 );
 
