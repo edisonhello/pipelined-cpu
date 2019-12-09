@@ -183,7 +183,7 @@ IFIDReg IFIDReg(
 	.nowpc_i		(now_pc_IF), 
 	.instruction_i	(instruction_IF),
 	.nowpc_o		(now_pc_ID),
-	.instruction_o  (instruction_ID)
+	.instruction_o  (instruction_ID),
     //lawfung
     .IFID_write_i   (IFID_control),
     .flush_i        (next_pc_selector)
