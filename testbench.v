@@ -65,7 +65,7 @@ initial begin
 	CPU.MEMWBReg.r4 = 2'b0;
 
     // Load instructions into instruction memory
-    $readmemb("../CA2019_project1/testdata/instruction.txt", CPU.Instruction_Memory.memory);
+    $readmemb("../CA2019_project1/testdata/Fibonacci_instruction.txt", CPU.Instruction_Memory.memory);
     
     // Open output file
     outfile = $fopen("output.txt") | 1;
@@ -90,7 +90,7 @@ always@(posedge Clk) begin
         $finish;
 
     // TODO: put in your own signal to count stall and flush
-    if (CPU.Hazard.pc_write_o == 0) stall = stall + 1;
+    if (CPU.Hazard.pc_write_o == 0 && CPU.BranchAND.a_i == 0) stall = stall + 1;
     if (CPU.BranchAND.o_o == 1) flush = flush + 1;
     // if(CPU.HazardDetection.Stall_o == 1 && CPU.Control.Branch_o == 0)stall = stall + 1;
     // if(CPU.HazardDetection.Flush_o == 1)flush = flush + 1;  
