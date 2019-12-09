@@ -11,7 +11,7 @@ reg [31:0] nowpc, instruction;
 always @ (posedge clk_i) begin
     if(flush_i == 1'b1) begin
         nowpc <= 32'b0;
-        instruction <=32'b0;
+        instruction <= 32'b0;
     end
     else if(IFID_write_i == 1'b1) begin
         nowpc <= nowpc_i;
@@ -43,10 +43,7 @@ output [4:0] rs1_o, rs2_o;
 reg [31:0] r1, r2, r3, r4;
 reg [4:0] r5, r6;
 reg [7:0] r7;
-
-//lawfung
-assign rs1_o = rs1_i;
-assign rs2_o = rs2_i;
+reg [4:0] r8, r9;
 
 always @ (posedge clk_i) begin
     r1 <= nowpc_i;
@@ -56,6 +53,8 @@ always @ (posedge clk_i) begin
     r5 <= alu_ctrl_instr_i;
     r6 <= reg_write_addr_i;
     r7 <= control_i;
+	r8 <= rs1_i;
+	r9 <= rs2_i;
 end
 
 assign nowpc_o = r1;
@@ -65,6 +64,8 @@ assign imm_o = r4;
 assign alu_ctrl_instr_o = r5;
 assign reg_write_addr_o = r6;
 assign control_o = r7;
+assign rs1_o = r8;
+assign rs2_o = r9;
 
 endmodule
 

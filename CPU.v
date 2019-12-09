@@ -110,9 +110,6 @@ MUX32 ALUSrcMUX(
     .o_o            (alu_b)
 );
 
-
-
-
 ALU ALU(
     .a_i            (ALU_new_sr1),    //lawfung
     .b_i            (alu_b),

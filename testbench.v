@@ -40,27 +40,29 @@ initial begin
 	CPU.PC.pc_o = 0;
 
     // TODO: initialize pipeline registers
-	CPU.IFIDReg.nowpc = 0;
-	CPU.IFIDReg.instruction = 0;
+	CPU.IFIDReg.nowpc = 32'b0;
+	CPU.IFIDReg.instruction = 32'b0;
 
-	CPU.IDEXReg.r1 = 0;
-	CPU.IDEXReg.r2 = 0;
-	CPU.IDEXReg.r3 = 0;
-	CPU.IDEXReg.r4 = 0;
-	CPU.IDEXReg.r5 = 0;
-	CPU.IDEXReg.r6 = 0;
-	CPU.IDEXReg.r7 = 0;
+	CPU.IDEXReg.r1 = 32'b0;
+	CPU.IDEXReg.r2 = 32'b0;
+	CPU.IDEXReg.r3 = 32'b0;
+	CPU.IDEXReg.r4 = 32'b0;
+	CPU.IDEXReg.r5 = 5'b0;
+	CPU.IDEXReg.r6 = 5'b0;
+	CPU.IDEXReg.r7 = 8'b0;
+	CPU.IDEXReg.r8 = 5'b0;
+	CPU.IDEXReg.r9 = 5'b0;
 
-	CPU.EXMEMReg.r1 = 0;
-	CPU.EXMEMReg.r2 = 0;
-	CPU.EXMEMReg.r3 = 0;
-	CPU.EXMEMReg.r4 = 0;
-	CPU.EXMEMReg.r5 = 0;
+	CPU.EXMEMReg.r1 = 32'b0;
+	CPU.EXMEMReg.r2 = 32'b0;
+	CPU.EXMEMReg.r3 = 5'b0;
+	CPU.EXMEMReg.r4 = 5'b0;
+	CPU.EXMEMReg.r5 = 1'b0;
     
-	CPU.MEMWBReg.r1 = 0;
-	CPU.MEMWBReg.r2 = 0;
-	CPU.MEMWBReg.r3 = 0;
-	CPU.MEMWBReg.r4 = 0;
+	CPU.MEMWBReg.r1 = 32'b0;
+	CPU.MEMWBReg.r2 = 32'b0;
+	CPU.MEMWBReg.r3 = 5'b0;
+	CPU.MEMWBReg.r4 = 2'b0;
 
     // Load instructions into instruction memory
     $readmemb("instruction.txt", CPU.Instruction_Memory.memory);
