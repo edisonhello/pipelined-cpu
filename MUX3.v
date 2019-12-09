@@ -9,7 +9,7 @@ reg [31:0] r_o_o;
 
 always @ (a_i or b_i or ctrl_i or c_i) begin
 	if (ctrl_i == 2'b00)        r_o_o = a_i;
-    else if(ctrl_i == 2'b01)    r_o_o = c_i;
+    else if(ctrl_i == 2'b10)    r_o_o = c_i;
 	else r_o_o = b_i;
 end
 
