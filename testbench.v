@@ -109,6 +109,9 @@ always@(posedge Clk) begin
     $fdisplay(outfile, "IDEXReg : r1 = %d, r2 = %d, r3 = %d, r4 = %d, r5 = %d, r6 = %d, r7 = %d", CPU.IDEXReg.r1, CPU.IDEXReg.r2, CPU.IDEXReg.r3, CPU.IDEXReg.r4, CPU.IDEXReg.r5, CPU.IDEXReg.r6, CPU.IDEXReg.r7);
     $fdisplay(outfile, "EXMEMReg: r1 = %d, r2 = %d, r3 = %d, r4 = %d, r5 = %d", CPU.EXMEMReg.r1, CPU.EXMEMReg.r2, CPU.EXMEMReg.r3, CPU.EXMEMReg.r4, CPU.EXMEMReg.r5);
     $fdisplay(outfile, "MEMWBReg: r1 = %d, r2 = %d, r3 = %d, r4 = %d", CPU.MEMWBReg.r1, CPU.MEMWBReg.r2, CPU.MEMWBReg.r3, CPU.MEMWBReg.r4);
+    $fdisplay(outfile, "ALU: a_i = %d, b_i = %d", CPU.ALU.a_i, CPU.ALU.b_i);
+    $fdisplay(outfile, "AND: a_i = %d, b_i = %d", CPU.BranchAND.a_i, CPU.BranchAND.b_i);
+    $fdisplay(outfile, "Hazard: mem_rd_i = %d, rs1_i = %d, rs2_i = %d, rrd_i = %d, hazard_occur = %d", CPU.Hazard.mem_rd_i, CPU.Hazard.rs1_i, CPU.Hazard.rs2_i, CPU.Hazard.rrd_i, CPU.Hazard.hazard_occur);
 
     // print Data Memory
     $fdisplay(outfile, "Data Memory: 0x00 = %10d", {CPU.Data_Memory.memory[3] , CPU.Data_Memory.memory[2] , CPU.Data_Memory.memory[1] , CPU.Data_Memory.memory[0] });
