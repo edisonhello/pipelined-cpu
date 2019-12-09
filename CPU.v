@@ -4,9 +4,9 @@ module CPU (clk_i, start_i);
 input clk_i;
 input start_i;
 
-wire [31:0] next_pc, now_pc_IF, instruction_IF, pc_select_0, pc_select_1_MEM,
+wire [31:0] next_pc, now_pc_IF, instruction_IF, pc_select_0,
 			instruction_ID, now_pc_ID, imm_ID, reg_data_1_ID, reg_data_2_ID,
-			now_pc_EX, pc_adder_b, pc_select_1_EX, reg_data_1_EX, reg_data_2_EX, alu_b, alu_result_EX, imm_EX,
+			now_pc_EX, pc_adder_b, reg_data_1_EX, reg_data_2_EX, alu_b, alu_result_EX, imm_EX,
 			alu_result_MEM, reg_data_2_MEM, memory_data_MEM, 
 			memory_data_WB, alu_result_WB, reg_write_data_WB;
 wire [4:0] reg_write_addr_EX, reg_write_addr_MEM, reg_write_addr_WB,
@@ -217,13 +217,13 @@ IDEXReg IDEXReg(
 
 EXMEMReg EXMEMReg(
 	.clk_i				(clk_i),
-	.pc_select_1_i		(pc_select_1_EX),
+	// .pc_select_1_i		(pc_select_1_EX),
 	.alu_zero_i			(alu_zero_EX),
 	.alu_result_i		(alu_result_EX),
 	.reg_data_2_i		(ALU_new_sr2),    //lawfung
 	.reg_write_addr_i	(reg_write_addr_EX),
 	.control_i			(control_EX),
-	.pc_select_1_o		(pc_select_1_MEM),
+	// .pc_select_1_o		(pc_select_1_MEM),
 	.alu_zero_o			(alu_zero_MEM),
 	.alu_result_o		(alu_result_MEM),
 	.reg_data_2_o		(reg_data_2_MEM),
