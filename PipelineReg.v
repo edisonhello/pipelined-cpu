@@ -1,15 +1,22 @@
 
-module IFIDReg(clk_i, nowpc_i, instruction_i, nowpc_o, instruction_o);
+module IFIDReg(clk_i, nowpc_i, instruction_i, nowpc_o, instruction_o, IFID_write_i, flush_i);
 
-input clk_i;
+input clk_i, IFID_write_i, flush_i;  //lawfung
 input [31:0] nowpc_i, instruction_i;
 output [31:0] nowpc_o, instruction_o;
 
 reg [31:0] nowpc, instruction;
 
+//lawfung
 always @ (posedge clk_i) begin
-    nowpc <= nowpc_i;
-    instruction <= instruction_i;
+    if(flush_i == 1'b1) begin
+        nowpc <= 32'b0;
+        instruction <=32'b0;
+    end
+    else if(IFID_write_i == 1'b1) begin
+        nowpc <= nowpc_i;
+        instruction <= instruction_i;
+    end
 end
 
 assign nowpc_o = nowpc;
@@ -18,19 +25,28 @@ assign instruction_o = instruction;
 endmodule
 
 module IDEXReg(clk_i, nowpc_i, reg_data_1_i, reg_data_2_i, imm_i, alu_ctrl_instr_i, reg_write_addr_i, control_i,
-                      nowpc_o, reg_data_1_o, reg_data_2_o, imm_o, alu_ctrl_instr_o, reg_write_addr_o, control_o);
+                      nowpc_o, reg_data_1_o, reg_data_2_o, imm_o, alu_ctrl_instr_o, reg_write_addr_o, control_o,
+                      rs1_i, rs2_i, rs1_o, rs2_o);      //lawfung
 
 input clk_i;
 input [31:0] nowpc_i, reg_data_1_i, reg_data_2_i, imm_i;
 input [4:0] alu_ctrl_instr_i, reg_write_addr_i;
 input [7:0] control_i;
+//lawfung
+input [4:0] rs1_i, rs2_i;
 output [31:0] nowpc_o, reg_data_1_o, reg_data_2_o, imm_o;
 output [4:0] alu_ctrl_instr_o, reg_write_addr_o;
 output [7:0] control_o;
+//lawfung
+output [4:0] rs1_o, rs2_o;
 
 reg [31:0] r1, r2, r3, r4;
 reg [4:0] r5, r6;
 reg [7:0] r7;
+
+//lawfung
+assign rs1_o = rs1_i;
+assign rs2_o = rs2_i;
 
 always @ (posedge clk_i) begin
     r1 <= nowpc_i;

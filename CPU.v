@@ -62,12 +62,12 @@ ImmGen ImmGen(
     .inst_i         (instruction_ID),
     .o_o            (imm_ID)
 );
-
+//lawfung
 ShiftLeft1 ShiftLeft1(
-    .i_i            (imm_EX),
+    .i_i            (imm_ID),
     .o_o            (pc_adder_b)
 );
-
+//lawfung
 Adder NextPCAdder(
     .a_i            (now_pc_EX),
     .b_i            (pc_adder_b),
@@ -81,16 +81,38 @@ MUX32 PCSrcMUX(
     .ctrl_i         (next_pc_selector),
     .o_o            (next_pc)
 );
+//lawfung
+wire [1:0] forwardA, forwardB;
+wire [31:0] ALU_new_sr1, ALU_new_sr2;
+//lawfung
+MUX32_3 ALUSrc1(
+    .a_i            (reg_data_1_EX),
+    .b_i            (reg_write_data_WB),
+    .c_i            (ALU_result_MEM)
+    .ctrl_i         (forwardA),
+    .o_o            (ALU_new_sr1)
+)
+//lawfung
+MUX32_3 ALUSrc2(
+    .a_i            (reg_data_2_EX),
+    .b_i            (reg_write_data_WB),
+    .c_i            (ALU_result_MEM)
+    .ctrl_i         (forwardB),
+    .o_o            (ALU_new_sr2)
+)
 
 MUX32 ALUSrcMUX(
-    .a_i            (reg_data_2_EX),
+    .a_i            (ALU_new_sr2),  //lawfung
     .b_i            (imm_EX),
     .ctrl_i         (alusrc_selector),
     .o_o            (alu_b)
 );
 
+
+
+
 ALU ALU(
-    .a_i            (reg_data_1_EX),
+    .a_i            (ALU_new_sr1),    //lawfung
     .b_i            (alu_b),
     .ctrl_i         (alu_ctrl),
     .zero_o         (alu_zero_EX),
@@ -103,6 +125,14 @@ MUX32 MemToRegMUX(
     .ctrl_i         (memtoreg_selector),
     .o_o            (reg_write_data_WB)
 );
+//lawfung
+Hazard Hazard(
+    .rs1_i          (instruction_ID[19:15]);
+    .rs2_i          (instruction_ID[24:20]);
+    .rrd_i          ()
+    .mem_rd_i       ()
+    
+)
 
 Control Control(
     .op_i           (instruction_ID[6:0]),
@@ -114,6 +144,14 @@ Control Control(
     .aluop_o        (control_ID[6:5]),
     .regwrite_o     (control_ID[0])
 );
+//lawufng
+wire [7:0] control_ID_new;
+//lawfung
+MUX32_8 ControlMUX(
+    .a_i            (control_ID),
+    .ctrl_i         (),
+    .o_o            (control_ID_new)
+)
 
 ALUControl ALUControl(
     .aluop_i        (alu_op),
@@ -122,9 +160,16 @@ ALUControl ALUControl(
     .aluctrl_o      (alu_ctrl)
 );
 
+//lawfung
+Equal BranchEqual(
+	.a_i			(reg_data_1_ID),
+	.b_i			(reg_data_2_ID),
+	.o_o			(alu_zero_MEM_new)
+);
+//lawfung
 AND BranchAND(
-	.a_i			(is_branch),
-	.b_i			(alu_zero_MEM),
+	.a_i			(control_ID[2]),
+	.b_i			(alu_zero_MEM_new),
 	.o_o			(next_pc_selector)
 );
 
@@ -136,6 +181,9 @@ IFIDReg IFIDReg(
 	.instruction_o  (instruction_ID)
 );
 
+//lawfung
+wire [4:0] rs1_ID, rs2_ID;
+
 IDEXReg IDEXReg(
 	.clk_i				(clk_i),
 	.nowpc_i			(now_pc_ID),
@@ -144,14 +192,19 @@ IDEXReg IDEXReg(
 	.imm_i				(imm_ID),
 	.alu_ctrl_instr_i	({ instruction_ID[30], instruction_ID[25], instruction_ID[14:12] }),
 	.reg_write_addr_i	(instruction_ID[11:7]),
-	.control_i			(control_ID),
+	.control_i			(control_ID_new),       //lawfung
 	.nowpc_o			(now_pc_EX),
 	.reg_data_1_o		(reg_data_1_EX),
 	.reg_data_2_o		(reg_data_2_EX),
 	.imm_o				(imm_EX),
 	.alu_ctrl_instr_o	(alu_ctrl_input_EX),
 	.reg_write_addr_o	(reg_write_addr_EX),
-	.control_o			({ alusrc_selector, alu_op ,control_EX })
+	.control_o			({ alusrc_selector, alu_op ,control_EX }),
+    //lawfung
+    .rs1_i              (instruction_ID[19:15]),
+    .rs2_i              (instruction_ID[24:20]),
+    .rs1_o              (rs1_ID),
+    .rs2_o              (rs2_ID)
 );
 
 EXMEMReg EXMEMReg(
@@ -159,7 +212,7 @@ EXMEMReg EXMEMReg(
 	.pc_select_1_i		(pc_select_1_EX),
 	.alu_zero_i			(alu_zero_EX),
 	.alu_result_i		(alu_result_EX),
-	.reg_data_2_i		(reg_data_2_EX),
+	.reg_data_2_i		(ALU_new_sr2),    //lawfung
 	.reg_write_addr_i	(reg_write_addr_EX),
 	.control_i			(control_EX),
 	.pc_select_1_o		(pc_select_1_MEM),
@@ -180,6 +233,17 @@ MEMWBReg MEMWBReg(
 	.alu_result_o		(alu_result_WB),
 	.reg_write_addr_o	(reg_write_addr_WB),
 	.control_o			({ memtoreg_selector, regwrite_selector })
+);
+//lawfung
+Forward Forwarding_unit(
+    .rs1_i              (rs1_ID),
+    .rs2_i              (rs2_ID),
+    .ex_mem_rrd_i       (reg_write_addr_MEM),
+    .mem_wb_rrd_i       (reg_write_addr_WB),
+    .ex_mem_wb_i        (control_MEM[0]),
+    .mem_wb_wb_i        (regwrite_selector),
+    .forwardA_o         (forwardA),
+    .forwardB_o         (forwardB)
 );
 
 endmodule
