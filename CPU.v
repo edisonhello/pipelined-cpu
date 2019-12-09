@@ -88,7 +88,7 @@ wire [31:0] ALU_new_sr1, ALU_new_sr2;
 MUX32_3 ALUSrc1(
     .a_i            (reg_data_1_EX),
     .b_i            (reg_write_data_WB),
-    .c_i            (ALU_result_MEM),
+    .c_i            (alu_result_MEM),
     .ctrl_i         (forwardA),
     .o_o            (ALU_new_sr1)
 );
@@ -96,7 +96,7 @@ MUX32_3 ALUSrc1(
 MUX32_3 ALUSrc2(
     .a_i            (reg_data_2_EX),
     .b_i            (reg_write_data_WB),
-    .c_i            (ALU_result_MEM),
+    .c_i            (alu_result_MEM),
     .ctrl_i         (forwardB),
     .o_o            (ALU_new_sr2)
 );

@@ -8,7 +8,7 @@ output      pc_write_o, IFID_write_o;
 
 wire hazard_occur ;
 
-assign hazard_occur = ( (mem_rd == 1'b1)   &&   (rs1_i == rrd_i || rd2_i == rrd_i) && rrd_i != 5'b0);
+assign hazard_occur = ( (mem_rd_i == 1'b1)   &&   (rs1_i == rrd_i || rs2_i == rrd_i) && rrd_i != 5'b0);
 
 assign mux_o = hazard_occur;
 
