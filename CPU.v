@@ -19,10 +19,12 @@ wire [1:0] control_MEM, alu_op;
 wire alusrc_selector, memwrite_selector, memread_selector, is_branch, memtoreg_selector, regwrite_selector, next_pc_selector,
 	 alu_zero_EX, alu_zero_MEM;
 
+//lawfung
+wire pc_control, IFID_control;
 PC PC(
     .clk_i          (clk_i),
     .start_i        (start_i),
-    .PCWrite_i      (1'b1),
+    .PCWrite_i      (pc_control),   //lawfung
     .pc_i           (next_pc),
     .pc_o           (now_pc_IF)
 );
@@ -62,22 +64,22 @@ ImmGen ImmGen(
     .inst_i         (instruction_ID),
     .o_o            (imm_ID)
 );
-//lawfung
 ShiftLeft1 ShiftLeft1(
-    .i_i            (imm_ID),
+    .i_i            (imm_ID),   //lawfung
     .o_o            (pc_adder_b)
 );
 //lawfung
+wire [31:0] jmp_pc;
 Adder NextPCAdder(
-    .a_i            (now_pc_EX),
-    .b_i            (pc_adder_b),
-    .o_o            (pc_select_1_EX),
+    .a_i            (now_pc_ID),    //lawfung
+    .b_i            (pc_adder_b),   
+    .o_o            (jmp_pc),
     .carry_o        ()
 );
 
 MUX32 PCSrcMUX(
     .a_i            (pc_select_0),
-    .b_i            (pc_select_1_MEM),
+    .b_i            (jmp_pc),           //lawfung
     .ctrl_i         (next_pc_selector),
     .o_o            (next_pc)
 );
@@ -126,12 +128,15 @@ MUX32 MemToRegMUX(
     .o_o            (reg_write_data_WB)
 );
 //lawfung
+wire control_mux_control;
 Hazard Hazard(
     .rs1_i          (instruction_ID[19:15]),
     .rs2_i          (instruction_ID[24:20]),
-    .rrd_i          (),
-    .mem_rd_i       ()
-    
+    .rrd_i          (reg_write_addr_EX),
+    .mem_rd_i       (control_EX[3]),
+    .mux_o          (control_mux_control),
+    .pc_write_o     (pc_control),
+    .IFID_write_o   (IFID_control)
 );
 
 Control Control(
@@ -149,7 +154,7 @@ wire [7:0] control_ID_new;
 //lawfung
 MUX32_8 ControlMUX(
     .a_i            (control_ID),
-    .ctrl_i         (),
+    .ctrl_i         (control_mux_control),
     .o_o            (control_ID_new)
 );
 
@@ -179,6 +184,9 @@ IFIDReg IFIDReg(
 	.instruction_i	(instruction_IF),
 	.nowpc_o		(now_pc_ID),
 	.instruction_o  (instruction_ID)
+    //lawfung
+    .IFID_write_i   (IFID_control),
+    .flush_i        (next_pc_selector)
 );
 
 //lawfung
