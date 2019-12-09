@@ -64,7 +64,7 @@ initial begin
 	CPU.MEMWBReg.r4 = 0;
 
     // Load instructions into instruction memory
-    $readmemb("../testdata/instruction.txt", CPU.Instruction_Memory.memory);
+    $readmemb("../testdata/instruction2.txt", CPU.Instruction_Memory.memory);
     
     // Open output file
     outfile = $fopen("../testdata/output.txt") | 1;
@@ -106,6 +106,10 @@ always@(posedge Clk) begin
     $fdisplay(outfile, "x5 = %d, x13 = %d, x21 = %d, x29 = %d", CPU.Registers.register[5], CPU.Registers.register[13], CPU.Registers.register[21], CPU.Registers.register[29]);
     $fdisplay(outfile, "x6 = %d, x14 = %d, x22 = %d, x30 = %d", CPU.Registers.register[6], CPU.Registers.register[14], CPU.Registers.register[22], CPU.Registers.register[30]);
     $fdisplay(outfile, "x7 = %d, x15 = %d, x23 = %d, x31 = %d", CPU.Registers.register[7], CPU.Registers.register[15], CPU.Registers.register[23], CPU.Registers.register[31]);
+    $fdisplay(outfile, "IFIDReg: nowpc = %d, instruction = %d", CPU.IFIDReg.nowpc, CPU.IFIDReg.instruction);
+    $fdisplay(outfile, "IDEXReg: r1 = %d, r2 = %d, r3 = %d, r4 = %d, r5 = %d, r6 = %d, r7 = %d", CPU.IDEXReg.r1, CPU.IDEXReg.r2, CPU.IDEXReg.r3, CPU.IDEXReg.r4, CPU.IDEXReg.r5, CPU.IDEXReg.r6, CPU.IDEXReg.r7);
+    $fdisplay(outfile, "EXMEMReg: r1 = %d, r2 = %d, r3 = %d, r4 = %d, r5 = %d, r6 = %d", CPU.EXMEMReg.r1, CPU.EXMEMReg.r2, CPU.EXMEMReg.r3, CPU.EXMEMReg.r4, CPU.EXMEMReg.r5, CPU.EXMEMReg.r6);
+    $fdisplay(outfile, "MEMWBReg: r1 = %d, r2 = %d, r3 = %d, r4 = %d", CPU.MEMWBReg.r1, CPU.MEMWBReg.r2, CPU.MEMWBReg.r3, CPU.MEMWBReg.r4);
 
     // print Data Memory
     $fdisplay(outfile, "Data Memory: 0x00 = %10d", {CPU.Data_Memory.memory[3] , CPU.Data_Memory.memory[2] , CPU.Data_Memory.memory[1] , CPU.Data_Memory.memory[0] });
