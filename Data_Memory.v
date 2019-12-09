@@ -23,7 +23,7 @@ assign  data_o = MemWrite_i? data_i : memory[addr_i];
 always @ (posedge clk_i) begin
 	// $display("MemWrite_i = %d\n", MemWrite_i);
     if (MemWrite_i) begin
-		$display("Memory: Write %d to addr %d\n", data_i, addr_i);
+		// $display("Memory: Write %d to addr %d\n", data_i, addr_i);
         memory[addr_i] <= data_i;
     end
 end
