@@ -1,8 +1,13 @@
-module CPU (clk_i, start_i);
+module CPU (clk_i, rst_i, start_i, 
+			mem_data_i, mem_ack_i, mem_data_o, mem_addr_o, mem_enable_o, mem_write_o);
 
 // Ports
-input clk_i;
-input start_i;
+input clk_i, rst_i, start_i;
+input [255:0] mem_data_i;
+input mem_ack_i;
+output [255:0] mem_data_o;
+output [31:0] mem_addr_o;
+output mem_enable_o, mem_write_o;
 
 wire [31:0] next_pc, now_pc_IF, instruction_IF, pc_select_0,
 			instruction_ID, now_pc_ID, imm_ID, reg_data_1_ID, reg_data_2_ID,
@@ -23,7 +28,9 @@ wire alusrc_selector, memwrite_selector, memread_selector, is_branch, memtoreg_s
 wire pc_control, IFID_control;
 PC PC(
     .clk_i          (clk_i),
+	.rst_i			(rst_i),
     .start_i        (start_i),
+	.stall_i		(),
     .PCWrite_i      (pc_control),   //lawfung
     .pc_i           (next_pc),
     .pc_o           (now_pc_IF)
@@ -45,24 +52,23 @@ Registers Registers(
     .RS2data_o      (reg_data_2_ID)
 );
 
-dcache_top Cache_Controller
-(
+dcache_top dcache(
     .clk_i			(clk_i), 
-    .rst_i			(), 
+    .rst_i			(rst_i), 
     // to Data Memory interface        
-    mem_data_i		(), 
-    mem_ack_i		(),     
-    mem_data_o		(), 
-    mem_addr_o		(),
-    mem_enable_o	(), 
-    mem_write_o		(), 
+    .mem_data_i		(mem_data_i), 
+    .mem_ack_i		(mem_ack_i),     
+    .mem_data_o		(mem_data_o), 
+    .mem_addr_o		(mem_addr_o),
+    .mem_enable_o	(mem_enable_o), 
+    .mem_write_o		(mem_write_o), 
     // to CPU interface    
-    p1_data_i		(reg_data_2_MEM), 
-    p1_addr_i		(alu_result_MEM),
-    p1_MemRead_i	(memread_selector), 
-    p1_MemWrite_i	(memwrite_selector), 
-    p1_data_o		(memory_data_MEM), 
-    p1_stall_o		()
+    .p1_data_i		(reg_data_2_MEM), 
+    .p1_addr_i		(alu_result_MEM),
+    .p1_MemRead_i	(memread_selector), 
+    .p1_MemWrite_i	(memwrite_selector), 
+    .p1_data_o		(memory_data_MEM), 
+    .p1_stall_o		()
 );
 
 Adder PC4Adder(
