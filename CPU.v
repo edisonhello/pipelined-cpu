@@ -45,12 +45,24 @@ Registers Registers(
     .RS2data_o      (reg_data_2_ID)
 );
 
-Data_Memory Data_Memory(
-    .clk_i          (clk_i),
-    .addr_i         (alu_result_MEM),
-    .MemWrite_i     (memwrite_selector),
-    .data_i         (reg_data_2_MEM),
-    .data_o         (memory_data_MEM)
+dcache_top Cache_Controller
+(
+    .clk_i			(clk_i), 
+    .rst_i			(), 
+    // to Data Memory interface        
+    mem_data_i		(), 
+    mem_ack_i		(),     
+    mem_data_o		(), 
+    mem_addr_o		(),
+    mem_enable_o	(), 
+    mem_write_o		(), 
+    // to CPU interface    
+    p1_data_i		(reg_data_2_MEM), 
+    p1_addr_i		(alu_result_MEM),
+    p1_MemRead_i	(memread_selector), 
+    p1_MemWrite_i	(memwrite_selector), 
+    p1_data_o		(memory_data_MEM), 
+    p1_stall_o		()
 );
 
 Adder PC4Adder(
