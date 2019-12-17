@@ -24,13 +24,15 @@ wire [1:0] control_MEM, alu_op;
 wire alusrc_selector, memwrite_selector, memread_selector, is_branch, memtoreg_selector, regwrite_selector, next_pc_selector,
 	 alu_zero_EX, alu_zero_MEM;
 
+wire mem_stall;
+
 //lawfung
 wire pc_control, IFID_control;
 PC PC(
     .clk_i          (clk_i),
 	.rst_i			(rst_i),
     .start_i        (start_i),
-	.stall_i		(),
+	.stall_i		(mem_stall),
     .PCWrite_i      (pc_control),   //lawfung
     .pc_i           (next_pc),
     .pc_o           (now_pc_IF)
@@ -61,14 +63,14 @@ dcache_top dcache(
     .mem_data_o		(mem_data_o), 
     .mem_addr_o		(mem_addr_o),
     .mem_enable_o	(mem_enable_o), 
-    .mem_write_o		(mem_write_o), 
+    .mem_write_o	(mem_write_o), 
     // to CPU interface    
     .p1_data_i		(reg_data_2_MEM), 
     .p1_addr_i		(alu_result_MEM),
     .p1_MemRead_i	(memread_selector), 
     .p1_MemWrite_i	(memwrite_selector), 
     .p1_data_o		(memory_data_MEM), 
-    .p1_stall_o		()
+    .p1_stall_o		(mem_stall)
 );
 
 Adder PC4Adder(
@@ -197,6 +199,7 @@ IFIDReg IFIDReg(
 	.clk_i			(clk_i),
 	.nowpc_i		(now_pc_IF), 
 	.instruction_i	(instruction_IF),
+	.stall_i		(mem_stall),
 	.nowpc_o		(now_pc_ID),
 	.instruction_o  (instruction_ID),
     //lawfung
@@ -215,6 +218,7 @@ IDEXReg IDEXReg(
 	.imm_i				(imm_ID),
 	.alu_ctrl_instr_i	({ instruction_ID[30], instruction_ID[25], instruction_ID[14:12] }),
 	.reg_write_addr_i	(instruction_ID[11:7]),
+	.stall_i			(mem_stall),
 	.control_i			(control_ID_new),       //lawfung
 	.nowpc_o			(now_pc_EX),
 	.reg_data_1_o		(reg_data_1_EX),
@@ -238,6 +242,7 @@ EXMEMReg EXMEMReg(
 	.reg_data_2_i		(ALU_new_sr2),    //lawfung
 	.reg_write_addr_i	(reg_write_addr_EX),
 	.control_i			(control_EX),
+	.stall_i			(mem_stall),
 	// .pc_select_1_o		(pc_select_1_MEM),
 	.alu_zero_o			(alu_zero_MEM),
 	.alu_result_o		(alu_result_MEM),
@@ -252,6 +257,7 @@ MEMWBReg MEMWBReg(
 	.alu_result_i		(alu_result_MEM),
 	.reg_write_addr_i	(reg_write_addr_MEM),
 	.control_i			(control_MEM),
+	.stall_i			(mem_stall),
 	.mem_read_data_o	(memory_data_WB),
 	.alu_result_o		(alu_result_WB),
 	.reg_write_addr_o	(reg_write_addr_WB),
