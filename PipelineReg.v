@@ -127,7 +127,7 @@ reg [4:0] r3;
 reg [1:0] r4;
 
 always @ (posedge clk_i) begin
-	if (stall) begin end
+	if (stall_i) begin end
 	else begin
 		r1 <= mem_read_data_i;
 		r2 <= alu_result_i;
