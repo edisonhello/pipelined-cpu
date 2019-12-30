@@ -146,7 +146,7 @@ always@(posedge clk_i or negedge rst_i) begin
         write_back <= 1'b0;
     end
     else begin
-        case(state)        
+        case(state)
             STATE_IDLE: begin
                 if(p1_req && !hit) begin      //wait for request
                     state <= STATE_MISS;
