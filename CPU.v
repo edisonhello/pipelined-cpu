@@ -153,8 +153,8 @@ Hazard Hazard(
     .mem_rd_i       (control_EX[3]),
     .mux_o          (control_mux_control),
     .pc_write_o     (pc_control),
-    .IFID_write_o   (IFID_control)
-	.exi_rs2_i		(instruction_ID[5])
+    .IFID_write_o   (IFID_control),
+    .exi_rs2_i		(instruction_ID[5])
 );
 
 Control Control(
