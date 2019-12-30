@@ -181,11 +181,15 @@ always@(posedge clk_i or negedge rst_i) begin
             end
             STATE_READMISSOK: begin            //wait for data memory acknowledge
                     // TODO: add you code here! 
+                mem_enable <= 1'b0;
+                cache_we <= 1'b0;
                 state <= STATE_IDLE;
             end
             STATE_WRITEBACK: begin
                 if(mem_ack_i) begin            //wait for data memory acknowledge
                     // TODO: add you code here! 
+                    // cache_we <= 1'b1;
+                    write_back <= 1'b0;
                     state <= STATE_READMISS;
                 end
                 else begin
