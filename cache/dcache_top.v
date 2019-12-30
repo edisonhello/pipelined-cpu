@@ -190,6 +190,7 @@ always@(posedge clk_i or negedge rst_i) begin
                     // TODO: add you code here! 
                     // cache_we <= 1'b1;
                     write_back <= 1'b0;
+                    cache_we <= 1'b1;
                     state <= STATE_READMISS;
                 end
                 else begin

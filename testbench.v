@@ -171,6 +171,12 @@ always@(posedge Clk) begin
     $fdisplay(outfile, "Data Memory: 0x00C0 = %h", Data_Memory.memory[6]);
     $fdisplay(outfile, "Data Memory: 0x00E0 = %h", Data_Memory.memory[7]);
     $fdisplay(outfile, "Data Memory: 0x0400 = %h", Data_Memory.memory[32]);
+
+
+    $fdisplay(outfile, "SRAM data: 0x0000 = %h", CPU.dcache.dcache_data_sram.memory[0]);
+    $fdisplay(outfile, "SRAM data: 0x0020 = %h", CPU.dcache.dcache_data_sram.memory[1]);
+    $fdisplay(outfile, "SRAM tag: 0x0000 = %b", CPU.dcache.dcache_tag_sram.memory[0]);
+    $fdisplay(outfile, "SRAM tag: 0x0020 = %b", CPU.dcache.dcache_tag_sram.memory[1]);
     
     $fdisplay(outfile, "\n");
     
