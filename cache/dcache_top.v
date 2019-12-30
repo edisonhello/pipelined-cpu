@@ -118,18 +118,20 @@ assign    write_hit    = hit & p1_MemWrite_i;
 assign    cache_dirty  = write_hit;
 
 // tag comparator
-// TODO: add you code here!  (hit=...?,  r_hit_data=...?)
+// TODO (completed): add you code here!  (hit=...?,  r_hit_data=...?)
 assign hit = (sram_tag == p1_tag);
 assign r_hit_data = (hit) ? sram_cache_data : mem_data_i;
     
 // read data :  256-bit to 32-bit
 always@(p1_offset or r_hit_data) begin
+  // TODO (completed): (p1_data=...?)
   p1_data = r_hit_data >> (p1_offset * 4);
 end
 
 
 // write data :  32-bit to 256-bit
 always@(p1_offset or r_hit_data or p1_data_i) begin
+  // TODO (completed): (w_hit_data=...?)
   w_hit_data = (r_hit_data & (~(15 << (p1_offset * 4)))) | ({224'b0, p1_data_i} << (p1_offset * 4));
 end
 
@@ -158,6 +160,7 @@ always@(posedge clk_i or negedge rst_i) begin
                     // TODO: add you code here! 
                     mem_write = 1;
                     mem_enable = 1;
+                    write_back = 1;
                     state <= STATE_WRITEBACK;
                 end
                 else begin                    //write allocate: write miss = read miss + write hit; read miss = read miss + read hit
@@ -169,6 +172,7 @@ always@(posedge clk_i or negedge rst_i) begin
             STATE_READMISS: begin
                 if(mem_ack_i) begin            //wait for data memory acknowledge
                     // TODO: add you code here! 
+                    cache_we = 1;
                     state <= STATE_READMISSOK;
                 end
                 else begin
