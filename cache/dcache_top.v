@@ -146,7 +146,7 @@ always@(posedge clk_i or negedge rst_i) begin
         write_back <= 1'b0;
     end
     else begin
-        case(state)        
+        case(state)
             STATE_IDLE: begin
                 if(p1_req && !hit) begin      //wait for request
                     state <= STATE_MISS;
@@ -158,14 +158,19 @@ always@(posedge clk_i or negedge rst_i) begin
             STATE_MISS: begin
                 if(sram_dirty) begin          //write back if dirty
                     // TODO: add you code here! 
+<<<<<<< HEAD
                     mem_write = 1;
                     mem_enable = 1;
                     write_back = 1;
+=======
+                    mem_write <= 1;
+                    mem_enable <= 1;
+>>>>>>> Change assign type
                     state <= STATE_WRITEBACK;
                 end
                 else begin                    //write allocate: write miss = read miss + write hit; read miss = read miss + read hit
                     // TODO: add you code here! 
-                    mem_enable = 1;
+                    mem_enable <= 1;
                     state <= STATE_READMISS;
                 end
             end
